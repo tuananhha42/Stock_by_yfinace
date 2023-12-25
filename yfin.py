@@ -91,7 +91,7 @@ open_price = st.sidebar.number_input("Open", min_value=0.0, key='open_price')
 high_price = st.sidebar.number_input("High", min_value=0.0, key='high_price')
 low_price = st.sidebar.number_input("Low", min_value=0.0, key='low_price')
 close_price = st.sidebar.number_input("Close", min_value=0.0, key='close_price')
-volume = st.sidebar.number_input("Volume", min_value=0, key='volume')
+# volume = st.sidebar.number_input("Volume", min_value=0, key='volume')
 
 if st.sidebar.button("Xem thông tin mô hình huấn luyện"):
     # Tạo từ điển ánh xạ mã công ty vào mô hình dự đoán và chuẩn hóa tương ứng
@@ -119,7 +119,7 @@ if "predicted_prices" not in st.session_state:
     st.session_state.predicted_prices = []
 
 # Hàm dự đoán giá cổ phiếu
-def predict_stock_price(open_price, high_price, low_price, close_price, volume, selected_company_code):
+def predict_stock_price(open_price, high_price, low_price, close_price, selected_company_code):
     if selected_company_code == 'AAPL':
         model = model_Apple
         scaler = Scale_Apple
@@ -136,7 +136,7 @@ def predict_stock_price(open_price, high_price, low_price, close_price, volume, 
         model = model_Microsoft
         scaler = Scale_Microsoft
     # Chuẩn hóa dữ liệu đầu vào
-    input_data = scaler.transform([[open_price, high_price, low_price, close_price, volume]])
+    input_data = scaler.transform([[open_price, high_price, low_price, close_price]])
     
     # Dự đoán giá cổ phiếu
     predicted_price = model.predict(input_data)
@@ -144,7 +144,7 @@ def predict_stock_price(open_price, high_price, low_price, close_price, volume, 
     return predicted_price[0]
 
 if st.sidebar.button("Dự báo"):
-    predicted_price = predict_stock_price(open_price, high_price, low_price, close_price, volume, selected_company_code)
+    predicted_price = predict_stock_price(open_price, high_price, low_price, close_price, selected_company_code)
     st.session_state.predicted_prices.append(predicted_price)
     st.markdown(f'<p class="red-text">Dự đoán giá cổ phiếu: ${(predicted_price):,.2f}</p>', unsafe_allow_html=True) # sử dụng markdown đã đc tạo từ trc
 
@@ -171,6 +171,6 @@ if st.sidebar.button('Reset'):
     high_price = 0.0
     low_price = 0
     close_price = 0
-    volume = 0
+    # volume = 0
     # Xóa danh sách predicted_prices
     st.session_state.predicted_prices = []
